@@ -1,0 +1,60 @@
+html{
+    background: linear-gradient(135deg, #FC8860 0%, #FFCC6F 100%);
+}
+
+body{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+header{
+    border-radius: 1rem 1rem 0 0;
+    width: 100%;
+    background: #FF6144;
+    position: relative;
+    text-align: center;
+}
+
+header > div {
+    height: 100px;
+}
+
+.order{
+    border-radius: 0 0 1rem 1rem;
+    width: 45rem;
+    min-height: 20rem;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    margin-left: 50px;
+    padding-bottom: 50px;
+    height: max-content;
+}
+
+.order > h1{
+    margin-left: 20px;
+}
+
+.order-items{
+    margin-left: 20px;
+}
+
+.order-summary{
+    margin-left: 20px;
+}
+
+.checkout{
+    margin-left: 20px;    
+}
+
+.holder{
+    width: 50px;
+}
+
+.item{
+    width: 500px;
+    background-color: white;
+}
+
+.add{
+    background-color: #FF6144;
+}

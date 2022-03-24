@@ -1,0 +1,22 @@
+version: "3.3"
+services:
+  backend-pizza-server:
+    image: backend-pizza-server
+    build: .
+    ports:
+      - 3000:3000
+    environment:
+      BASE_URL: http://localhost:3000/
+      MONGO_URI: mongodb://backend-database
+    networks:
+      - backend-networks
+    depends_on:
+      - backend-database
+  
+  backend-database:
+    image: mongo:4
+    networks:
+      - backend-networks
+
+networks:
+  backend-networks:

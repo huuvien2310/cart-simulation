@@ -1,0 +1,37 @@
+GET http://localhost:3000/api/items
+###
+POST http://localhost:3000/api/item HTTP/1.1
+content-type: application/json
+
+{
+    "name": "Rice",
+    "price": 4,
+    "quantity": 1
+}
+###
+POST http://localhost:3000/api/item HTTP/1.1
+content-type: application/json
+
+{
+    "name": "Ramen",
+    "price": 8,
+    "quantity": 1
+}
+###
+GET http://localhost:3000/api/orders
+###
+POST http://localhost:3000/api/order HTTP/1.1
+content-type: application/json
+
+{
+    "items": [
+        {
+            "name": "Pizza",
+            "price": 7
+        },
+        {
+            "name": "Pasta",
+            "price": 5
+        }
+    ]
+}
