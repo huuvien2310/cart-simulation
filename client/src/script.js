@@ -7,7 +7,7 @@ async function main(){
         const html = items.map(item => `
             <div class="item">
                 <p>${item.name}</p>
-                <p>Price <span>${item.price}</span></p>
+                <p>Price <span>$${item.price}</span></p>
                 <button class="add">Add</button>
             </div>
         `).join('')
@@ -43,7 +43,7 @@ async function main(){
                 </span>
 
                 <span class="price">
-                    <span>${(item.quantity * item.price)}</span>
+                    <span>$${(item.quantity * item.price)}</span>
                     <button class="delete">X</button>
                 </span>
             </li>

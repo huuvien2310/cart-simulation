@@ -1,7 +1,7 @@
 version: "3.3"
 services:
-  backend-pizza-server:
-    image: backend-pizza-server
+  order-page-server:
+    image: order-page-server
     build: .
     ports:
       - 3000:3000
