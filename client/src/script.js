@@ -1,7 +1,8 @@
 async function main(){
     const response = await axios.get('http://localhost:3000/api/items')
     const items = response.data
-    console.log(items)
+
+    const order_items = []
 
     function defaultItems(){
         const html = items.map(item => `
@@ -32,18 +33,18 @@ async function main(){
         })
         const total = subTotal + SHIPPING;
         
-        const html = items.map(item => `
-            <li class="order-item">
-                <span>${item.name}</span>
+        const html = order_items.map(order_item => `
+            <li class="order-order_item">
+                <span>${order_item.name}</span>
 
                 <span class="quantity">
                 <button class="dec">-</button>
-                <input class="holder" readonly="true" type="number" value="${item.quantity}">
+                <input class="holder" readonly="true" type="number" value="${order_item.quantity}">
                 <button class="inc">+</button>
                 </span>
 
                 <span class="price">
-                    <span>$${(item.quantity * item.price)}</span>
+                    <span>$${(order_item.quantity * order_item.price)}</span>
                     <button class="delete">X</button>
                 </span>
             </li>
@@ -71,8 +72,12 @@ async function main(){
         document.getElementById('total').innerText = `$${total}`
     }
 
+    document.getElementById('checkout').addEventListener('click', () => {
+        checkOut()
+    })
+
     function add(index){
-        items.push(items[index])
+        order_items.push(items[index])
         render()
     }
 
@@ -87,6 +92,46 @@ async function main(){
         }
 
         items[index].quantity = quantity
+        render()
+    }
+
+    function checkOut(){
+        const order = {
+            items: []
+        }
+        order_items.forEach(order_item => {
+            order.items.push(order_item)
+        })
+        axios.post("http://localhost:3000/api/order", order)
+            .then(() => {
+                for (const order_item in order){
+                    delete order[order_item]
+                }
+                order_items.length = 0
+                const html = order_items.map(order_item => `
+                    <li class="order-order_item">
+                        <span>${order_item.name}</span>
+
+                        <span class="quantity">
+                        <button class="dec">-</button>
+                        <input class="holder" readonly="true" type="number" value="${order_item.quantity}">
+                        <button class="inc">+</button>
+                        </span>
+
+                        <span class="price">
+                            <span>$${(order_item.quantity * order_item.price)}</span>
+                            <button class="delete">X</button>
+                        </span>
+                    </li>
+                `).join('')
+                document.getElementById('orders').innerHTML = html
+                console.log('Thank you for your order')
+                console.log(order)
+                console.log(order_items)
+            })
+            .catch(error => {
+                console.error(error);
+        })
         render()
     }
 
