@@ -7,17 +7,24 @@ async function main(){
     function defaultItems(){
         const html = items.map(item => `
             <div class="item">
-                <p>${item.name}</p>
-                <p>Price <span>$${item.price}</span></p>
-                <button class="add">Add</button>
+                <img class="fit-picture"
+                src="https://media-cldnry.s-nbcnews.com/image/upload/t_focal-758x379,f_auto,q_auto:best/rockcms/2022-03/plant-based-food-mc-220323-02-273c7b.jpg"
+                alt="Grapefruit slice atop a pile of other slices">
+                <div class="info">
+                <div class="left">
+                    <p class="name">${item.name}</p>
+                    <button id="add-button" class="add">Add</button>
+                </div>
+                <p class="price"><span>$${item.price}</span></p>
+                </div>
             </div>
         `).join('')
         document.getElementById('items').innerHTML = html
-
         const addButton = [...document.getElementsByClassName('add')]
         for(let i = 0; i < items.length; i++){
             addButton[i].addEventListener('click', () => {
-                add(i)
+                add(i);
+                addButton[i].classList.toggle('hide-add');
             })
         }
     }
@@ -28,8 +35,8 @@ async function main(){
 
     function render(){
         let subTotal = 0;
-        items.forEach(item => {
-            subTotal += item.quantity * item.price
+        order_items.forEach(order_item => {
+            subTotal += order_item.quantity * order_item.price
         })
         const total = subTotal + SHIPPING;
         
@@ -57,10 +64,10 @@ async function main(){
 
         for(let i = 0; i < deleteButtons.length; i++){
             decButton[i].addEventListener('click', () => {
-                updateQuantity(i, items[i].quantity - 1)
+                updateQuantity(i, order_items[i].quantity - 1)
             })
             incButton[i].addEventListener('click', () => {
-                updateQuantity(i, items[i].quantity + 1)
+                updateQuantity(i, order_items[i].quantity + 1)
             })
             deleteButtons[i].addEventListener('click', () => {
                 remove(i)
@@ -82,7 +89,8 @@ async function main(){
     }
 
     function remove(index){
-        items.splice(index, 1)
+        order_items.splice(index, 1)
+        document.getElementsByClassName('add')[index].classList.toggle('hide-add')
         render()
     }
 
@@ -100,6 +108,7 @@ async function main(){
             items: []
         }
         order_items.forEach(order_item => {
+            console.log(order_item)
             order.items.push(order_item)
         })
         axios.post("http://localhost:3000/api/order", order)
@@ -107,7 +116,9 @@ async function main(){
                 for (const order_item in order){
                     delete order[order_item]
                 }
+
                 order_items.length = 0
+
                 const html = order_items.map(order_item => `
                     <li class="order-order_item">
                         <span>${order_item.name}</span>
@@ -125,17 +136,28 @@ async function main(){
                     </li>
                 `).join('')
                 document.getElementById('orders').innerHTML = html
+                // console.log(hideAddButton)
+                // hideAddButton.forEach(button => {
+                //     button.classList.toggle('add')
+                //     console.log(button)
+                // })
+                render()
                 console.log('Thank you for your order')
-                console.log(order)
-                console.log(order_items)
             })
             .catch(error => {
                 console.error(error);
         })
-        render()
     }
 
     render()
 }
 
 main()
+
+// const hideAddButton = [...document.getElementsByClassName('hide-add')]
+
+// for(let i = 0; i < hideAddButton.length; i++){
+//     console.log(hideAddButton[i])
+//     hideAddButton[i].classList.toggle('add');
+//     console.log(hideAddButton[i])
+// }
